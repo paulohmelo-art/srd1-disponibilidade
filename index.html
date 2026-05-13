@@ -535,7 +535,7 @@ tr:hover td{background:var(--surface2)}
 
 <script>
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const SHEETS_URL = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxl5ZjcP0pFTS8Qe7ZlEhumZoHzfXvccAPCpfNHbloAX7lbfkvxsxThY5olXcPeKoW4/exec';
+const SHEETS_URL = 'https://script.google.com/s/AKfycbxl5ZjcP0pFTS8Qe7ZlEhumZoHzfXvccAPCpfNHbloAX7lbfkvxsxThY5olXcPeKoW4/exec';
 
 const RULES = {
   rental: { min:1,  mlp:['Rodacoop'],         label:'Rental Utilitário s/ Aj.' },
@@ -699,7 +699,7 @@ function submitForm(){
 }
 
 function sendToSheets(rec, cb){
-  if(!SHEETS_URL || SHEETS_URL==='https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxl5ZjcP0pFTS8Qe7ZlEhumZoHzfXvccAPCpfNHbloAX7lbfkvxsxThY5olXcPeKoW4/exec'){ cb(); return; }
+  if(!SHEETS_URL || SHEETS_URL==='https://script.google.com/s/AKfycbxl5ZjcP0pFTS8Qe7ZlEhumZoHzfXvccAPCpfNHbloAX7lbfkvxsxThY5olXcPeKoW4/exec'){ cb(); return; }
 
   const p = {
     timestamp:     rec.timestamp,
