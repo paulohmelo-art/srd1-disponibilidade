@@ -763,7 +763,7 @@ function validate() {
 }
 
 // ── Google Sheets endpoint — cole aqui a URL do seu Apps Script ──────────────
-const SHEETS_URL = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwbbnVXsJP6nN8EjHPS_Skm4w5QobOxVm2xx5fKDNcl3UQHS-6nSBDtpP7YNsNvV3Hp/exec';
+const SHEETS_URL = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzyYiKKsNCTMBq4j6fk9dJki8SNXOnLGjW7S77RwuhimIH67UHCImpaRtrtms9vCadxZQ/exec';
 
 function submitForm() {
   if (!validate()) { window.scrollTo({top:0,behavior:'smooth'}); return; }
@@ -804,7 +804,7 @@ function submitForm() {
   document.getElementById('success-wrap').classList.add('show');
 
   // Send to Google Sheets in background
-  if (SHEETS_URL && SHEETS_URL !== 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwbbnVXsJP6nN8EjHPS_Skm4w5QobOxVm2xx5fKDNcl3UQHS-6nSBDtpP7YNsNvV3Hp/exec') {
+  if (SHEETS_URL && SHEETS_URL !== 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzyYiKKsNCTMBq4j6fk9dJki8SNXOnLGjW7S77RwuhimIH67UHCImpaRtrtms9vCadxZQ/exec') {
     const payload = {
       timestamp:  rec.timestamp,
       data:       rec.data,
