@@ -804,7 +804,7 @@ function submitForm() {
   document.getElementById('success-wrap').classList.add('show');
 
   // Send to Google Sheets in background
-  if (SHEETS_URL && SHEETS_URL !== 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwSxLJezM2QckGA5XlZdkgzr3DQRkP8bBhJXPuxAXCNEPHxh1FCVnwLwmzd5iv_mC1T/exec') {
+  if (SHEETS_URL && SHEETS_URL ! = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwSxLJezM2QckGA5XlZdkgzr3DQRkP8bBhJXPuxAXCNEPHxh1FCVnwLwmzd5iv_mC1T/exec') {
     const payload = {
       timestamp:  rec.timestamp,
       data:       rec.data,
