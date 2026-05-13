@@ -763,7 +763,7 @@ function validate() {
 }
 
 // ── Google Sheets endpoint — cole aqui a URL do seu Apps Script ──────────────
-const SHEETS_URL = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwSxLJezM2QckGA5XlZdkgzr3DQRkP8bBhJXPuxAXCNEPHxh1FCVnwLwmzd5iv_mC1T/exec';
+const SHEETS_URL = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbweZYAS_oRd1ivIlOP2usCk_IC49dN2btVnIJPzV5geBLO1IqCGU2dJqxKzIAxffJAm/exec';
 
 function submitForm() {
   if (!validate()) { window.scrollTo({top:0,behavior:'smooth'}); return; }
@@ -804,7 +804,7 @@ function submitForm() {
   document.getElementById('success-wrap').classList.add('show');
 
   // Send to Google Sheets in background
-  if (SHEETS_URL && SHEETS_URL ! = 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwSxLJezM2QckGA5XlZdkgzr3DQRkP8bBhJXPuxAXCNEPHxh1FCVnwLwmzd5iv_mC1T/exec') {
+  if (SHEETS_URL && SHEETS_URL !== 'https://script.google.com/a/macros/mercadolivre.com/s/AKfycbweZYAS_oRd1ivIlOP2usCk_IC49dN2btVnIJPzV5geBLO1IqCGU2dJqxKzIAxffJAm/exec') {
     const payload = {
       timestamp:  rec.timestamp,
       data:       rec.data,
@@ -819,17 +819,22 @@ function submitForm() {
       vant:       rec.vant,
       total:      rec.total,
       status:     rec.status,
-      vec_rental: rec.vecStatus.rental || 'na',
-      vec_vuct:   rec.vecStatus.vuct   || 'na',
-      vec_vant:   rec.vecStatus.vant   || 'na',
-      obs:        rec.obs
+      vec_rental:    rec.vecStatus.rental || 'na',
+      ticket_rental: rec.tickets && rec.tickets.rental ? rec.tickets.rental : '',
+      vec_vuct:      rec.vecStatus.vuct   || 'na',
+      ticket_vuct:   rec.tickets && rec.tickets.vuct   ? rec.tickets.vuct   : '',
+      vec_vant:      rec.vecStatus.vant   || 'na',
+      ticket_vant:   rec.tickets && rec.tickets.vant   ? rec.tickets.vant   : '',
+      obs:           rec.obs
     };
-    fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).catch(() => {}); // silent fail — data already saved locally
+    // GET with URL params — única abordagem confiável com no-cors + Apps Script
+    const qs = Object.entries(payload)
+      .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+      .join('&');
+    fetch(SHEETS_URL + '?' + qs, {
+      method: 'GET',
+      mode: 'no-cors'
+    }).catch(() => {});
   }
 }
 
