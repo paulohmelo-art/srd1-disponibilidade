@@ -535,7 +535,10 @@ tr:hover td{background:var(--surface2)}
 
 <script>
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const FORMSPREE_URL = 'https://formspree.io/f/xzdoqdqb'; // Ex: https://formspree.io/f/xxxxxxxx
+// ── Supabase config ─────────────────────────────────────────────────
+const SUPABASE_URL    = 'https://akhjraxeriuipohgsixc.supabase.co';   // Ex: https://xyzxyz.supabase.co
+const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFraGpyYXhlcml1aXBvaGdzaXhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTk2MjAsImV4cCI6MjA5NDI5NTYyMH0.OSeW9OcqK3jSN4-aleRKdHMw-XbOzqTr5oN2WfsTzqM';         // Project Settings → API → anon public
+const SUPABASE_TABLE  = 'disponibilidade';               // Nome da tabela (criada no guia)
 
 const RULES = {
   rental: { min:1,  mlp:['Rodacoop'],         label:'Rental Utilitário s/ Aj.' },
@@ -699,45 +702,47 @@ function submitForm(){
 }
 
 function sendToSheets(rec, cb){
-  if(!FORMSPREE_URL || FORMSPREE_URL==='https://formspree.io/f/xzdoqdqb'){ cb(); return; }
+  if(!SUPABASE_URL || SUPABASE_URL==='https://akhjraxeriuipohgsixc.supabase.co'){ cb(); return; }
 
-  const payload = {
-    _subject:      'SRD1 – Nova resposta: ' + rec.mlp + ' (' + rec.data + ')',
-    Timestamp:     rec.timestamp,
-    Data:          rec.data,
-    MLP:           rec.mlp,
-    Responsavel:   rec.responsavel,
-    VAN:           rec.van,
-    VUC:           rec.vuc,
-    Utilitarios:   rec.util,
-    Passeio:       rec.pass,
-    Rental:        rec.rental,
-    VUC_TKS:       rec.vuct,
-    VAN_TKS:       rec.vant,
-    Total:         rec.total,
-    Status:        rec.status,
-    VEC_Rental:    rec.vecStatus?.rental||'na',
-    Ticket_Rental: rec.tickets?.rental||'',
-    VEC_VUC_TKS:   rec.vecStatus?.vuct||'na',
-    Ticket_VUC:    rec.tickets?.vuct||'',
-    VEC_VAN_TKS:   rec.vecStatus?.vant||'na',
-    Ticket_VAN:    rec.tickets?.vant||'',
-    Observacoes:   rec.obs
+  const row = {
+    timestamp:     rec.timestamp,
+    data:          rec.data,
+    mlp:           rec.mlp,
+    responsavel:   rec.responsavel,
+    van:           rec.van,
+    vuc:           rec.vuc,
+    util:          rec.util,
+    pass:          rec.pass,
+    rental:        rec.rental,
+    vuct:          rec.vuct,
+    vant:          rec.vant,
+    total:         rec.total,
+    status:        rec.status,
+    vec_rental:    rec.vecStatus?.rental||'na',
+    ticket_rental: rec.tickets?.rental||'',
+    vec_vuct:      rec.vecStatus?.vuct||'na',
+    ticket_vuct:   rec.tickets?.vuct||'',
+    vec_vant:      rec.vecStatus?.vant||'na',
+    ticket_vant:   rec.tickets?.vant||'',
+    obs:           rec.obs
   };
 
-  fetch(FORMSPREE_URL, {
+  fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body:    JSON.stringify(payload)
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Prefer':        'return=minimal'
+    },
+    body: JSON.stringify(row)
   })
-  .then(r => r.json())
-  .then(data => {
-    if(data.ok) cb();
-    else { console.error('Formspree error:', data); cb(); }
+  .then(r => {
+    if(r.ok) { cb(); }
+    else { r.text().then(t => { console.error('Supabase error:', r.status, t); cb(); }); }
   })
-  .catch(err => { console.error('Fetch error:', err); cb(); });
+  .catch(err => { console.error('Supabase fetch error:', err); cb(); });
 
-  // Safety timeout
   setTimeout(cb, 8000);
 }
 
